@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // src/__tests__/TodoList.test.js
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -38,6 +39,7 @@ describe('TodoList Component', () => {
     expect(todo).toHaveStyle('text-decoration: none');
   });
 
+  // eslint-disable-next-line no-undef
   test('deletes a todo', () => {
     render(<TodoList />);
     
@@ -47,6 +49,7 @@ describe('TodoList Component', () => {
     fireEvent.click(screen.getAllByText('Delete')[0]);
     
     // Verify the todo is deleted
+    // eslint-disable-next-line no-undef
     expect(todo).not.toBeInTheDocument();
   });
 });
