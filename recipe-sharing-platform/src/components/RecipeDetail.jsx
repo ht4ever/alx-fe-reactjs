@@ -18,20 +18,22 @@ const RecipeDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6">{recipe.title}</h1>
-      <img
-        src={recipe.image}
-        alt={recipe.title}
-        className="w-full h-80 object-cover rounded-lg mb-6"
-      />
-      <h2 className="text-2xl font-semibold mb-4">Ingredients</h2>
-      <ul className="list-disc list-inside mb-6">
-        {recipe.ingredients?.map((ingredient, index) => (
-          <li key={index} className="text-gray-700">{ingredient}</li>
-        ))}
-      </ul>
-      <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
-      <p className="text-gray-700">{recipe.instructions}</p>
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-4xl font-bold mb-6">{recipe.title}</h1>
+        <img
+          src={recipe.image}
+          alt={recipe.title}
+          className="w-full h-80 object-cover rounded-lg mb-6 shadow-md"
+        />
+        <h2 className="text-2xl font-semibold mb-4">Ingredients</h2>
+        <ul className="list-disc list-inside mb-6">
+          {recipe.ingredients?.map((ingredient, index) => (
+            <li key={index} className="text-gray-700">{ingredient}</li>
+          ))}
+        </ul>
+        <h2 className="text-2xl font-semibold mb-4">Cooking Instructions</h2>
+        <p className="text-gray-700">{recipe.instructions}</p>
+      </div>
     </div>
   );
 };
