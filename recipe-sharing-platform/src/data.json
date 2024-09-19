@@ -9,23 +9,41 @@
         "100g pancetta",
         "2 large eggs",
         "50g pecorino cheese",
-        "Black pepper"
+        "50g parmesan",
+        "Freshly ground black pepper",
+        "Salt"
       ],
-      "instructions": "Cook spaghetti. Fry pancetta. Mix eggs and cheese. Combine all with pasta and serve."
+      "instructions": [
+        "Cook spaghetti according to the package instructions.",
+        "Fry the pancetta in a pan until crispy.",
+        "Whisk eggs with pecorino and parmesan cheese.",
+        "Drain the spaghetti and mix it with the pancetta.",
+        "Quickly mix in the egg and cheese mixture off the heat.",
+        "Season with black pepper and serve."
+      ]
     },
     {
       "id": 2,
       "title": "Chicken Tikka Masala",
-      "summary": "Chunks of grilled chicken (tikka) cooked in a smooth buttery & creamy tomato based gravy.",
+      "summary": "Chunks of grilled chicken (tikka) cooked in a smooth buttery & creamy tomato-based gravy.",
       "image": "https://via.placeholder.com/150",
       "ingredients": [
-        "500g chicken breasts",
+        "500g chicken breast",
         "1 cup yogurt",
         "2 tbsp garam masala",
-        "1 cup tomato sauce",
-        "1/2 cup cream"
+        "1 can tomato puree",
+        "1 cup heavy cream",
+        "2 tbsp butter",
+        "Cilantro for garnish"
       ],
-      "instructions": "Marinate chicken in yogurt and spices. Grill until cooked. Simmer with tomato sauce and cream."
+      "instructions": [
+        "Marinate chicken in yogurt and garam masala for at least 1 hour.",
+        "Grill the chicken until fully cooked.",
+        "In a pan, melt butter and add tomato puree.",
+        "Simmer the sauce, then stir in the heavy cream.",
+        "Add the grilled chicken to the sauce and cook for 5 minutes.",
+        "Garnish with cilantro and serve with rice."
+      ]
     }
   ]
   
