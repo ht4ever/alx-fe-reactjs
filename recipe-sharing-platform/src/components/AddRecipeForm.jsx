@@ -1,4 +1,3 @@
-// src/components/AddRecipeForm.js
 import React, { useState } from 'react';
 
 const AddRecipeForm = ({ onAddRecipe }) => {
