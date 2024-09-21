@@ -1,129 +1,83 @@
+// src/components/AddRecipeForm.js
 import React, { useState } from 'react';
 
-const AddRecipeForm = () => {
-  // State to manage form input values
-  const [formData, setFormData] = useState({
-    title: '',
-    ingredients: '',
-    steps: '',
-  });
+const AddRecipeForm = ({ onAddRecipe }) => {
+  const [title, setTitle] = useState('');
+  const [ingredients, setIngredients] = useState('');
+  const [preparation, setPreparation] = useState('');
+  const [error, setError] = useState('');
 
-  // State to manage errors
-  const [errors, setErrors] = useState({});
-
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Validation function
-  const validate = () => {
-    let validationErrors = {};
-
-    // Check if the title is empty
-    if (!formData.title) {
-      validationErrors.title = 'Recipe title is required';
-    }
-
-    // Check if ingredients are provided
-    if (!formData.ingredients) {
-      validationErrors.ingredients = 'Please list the ingredients';
-    }
-
-    // Check if steps are provided
-    if (!formData.steps) {
-      validationErrors.steps = 'Please provide the preparation steps';
-    }
-
-    setErrors(validationErrors);
-    
-    // Return true if no validation errors, false otherwise
-    return Object.keys(validationErrors).length === 0;
-  };
-
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('');
 
-    // Run validation
-    const isValid = validate();
-
-    if (isValid) {
-      // Submit form data (you can implement the submission logic here)
-      console.log('Form Submitted:', formData);
-
-      // Clear the form after submission
-      setFormData({
-        title: '',
-        ingredients: '',
-        steps: '',
-      });
-      setErrors({});
+    // Basic validation
+    if (!title || !ingredients || !preparation) {
+      setError('All fields are required.');
+      return;
     }
+
+    const ingredientsArray = ingredients.split(',').map(item => item.trim());
+    if (ingredientsArray.length < 2) {
+      setError('Please provide at least two ingredients.');
+      return;
+    }
+
+    const newRecipe = {
+      title,
+      ingredients: ingredientsArray,
+      preparation, // This is where the preparation steps are included
+    };
+
+    onAddRecipe(newRecipe); // Call the function passed as a prop to add the recipe
+    setTitle('');
+    setIngredients('');
+    setPreparation('');
   };
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Add a New Recipe</h2>
+    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Add New Recipe</h2>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700 font-semibold mb-2">
-            Recipe Title:
-          </label>
+          <label className="block text-gray-700" htmlFor="title">Recipe Title</label>
           <input
             type="text"
-            name="title"
             id="title"
-            value={formData.title}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${
-              errors.title ? 'border-red-500' : 'border-gray-300'
-            }`}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500"
+            required
           />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
         </div>
-
         <div className="mb-4">
-          <label htmlFor="ingredients" className="block text-gray-700 font-semibold mb-2">
-            Ingredients:
-          </label>
+          <label className="block text-gray-700" htmlFor="ingredients">Ingredients (comma-separated)</label>
           <textarea
-            name="ingredients"
             id="ingredients"
-            value={formData.ingredients}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${
-              errors.ingredients ? 'border-red-500' : 'border-gray-300'
-            }`}
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500"
+            rows="4"
+            required
           />
-          {errors.ingredients && <p className="text-red-500 text-sm">{errors.ingredients}</p>}
         </div>
-
         <div className="mb-4">
-          <label htmlFor="steps" className="block text-gray-700 font-semibold mb-2">
-            Preparation Steps:
-          </label>
+          <label className="block text-gray-700" htmlFor="preparation">Preparation Steps</label>
           <textarea
-            name="steps"
-            id="steps"
-            value={formData.steps}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded ${
-              errors.steps ? 'border-red-500' : 'border-gray-300'
-            }`}
+            id="preparation"
+            value={preparation}
+            onChange={(e) => setPreparation(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-500"
+            rows="4"
+            required
           />
-          {errors.steps && <p className="text-red-500 text-sm">{errors.steps}</p>}
         </div>
-
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-300"
         >
-          Submit Recipe
+          Add Recipe
         </button>
       </form>
     </div>
