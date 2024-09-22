@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchAdvancedUserData } from '../services/githubService';
+import { fetchAdvancedUserData } from '../services/githubService';  // Import the service
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,8 +8,8 @@ const Search = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [page, setPage] = useState(1);  // For pagination
-  const [hasMore, setHasMore] = useState(true); // Tracks if there are more results
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,9 +17,9 @@ const Search = () => {
 
     setLoading(true);
     setError('');
-    setUsers([]); // Clear previous data
-    setPage(1);  // Reset to first page on new search
-    setHasMore(true); // Reset hasMore for a new search
+    setUsers([]);
+    setPage(1);
+    setHasMore(true);
     try {
       const data = await fetchAdvancedUserData(searchTerm, location, minRepos, 1);
       setUsers(data.items);
