@@ -2,23 +2,21 @@ import React, { useState } from 'react';
 import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [username, setUsername] = useState('');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!searchTerm) return;
-
     setLoading(true);
-    setError('');
-    setUserData(null); // Clear previous data
+    setError(null);
+
     try {
-      const data = await fetchUserData(searchTerm);
+      const data = await fetchUserData(username);
       setUserData(data);
     } catch (err) {
-      setError('Looks like we can’t find the user.');
+      setError('Looks like we can\'t find the user');
     } finally {
       setLoading(false);
     }
@@ -29,22 +27,22 @@ const Search = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter GitHub username"
-          required
+          placeholder="Enter a GitHub username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <button type="submit">Search</button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {loading && <div>Loading...</div>}
+      {error && <div>{error}</div>}
       {userData && (
         <div>
-          <img src={userData.avatar_url} alt="User Avatar" width="100" />
-          <h3>{userData.name || userData.login}</h3>
+          <img src={userData.avatar_url} alt={userData.login} />
+          <h2>{userData.name}</h2>
+          <p>{userData.login}</p>
           <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-            Visit GitHub Profile
+            View on GitHub
           </a>
         </div>
       )}
