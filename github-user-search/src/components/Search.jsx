@@ -1,50 +1,106 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';
+import { fetchAdvancedUserData } from '../services/githubService';
 
 const Search = () => {
-  const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [location, setLocation] = useState('');
+  const [minRepos, setMinRepos] = useState('');
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [page, setPage] = useState(1);  // For pagination
+  const [hasMore, setHasMore] = useState(true); // Tracks if there are more results
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    if (!searchTerm && !location && !minRepos) return;
 
+    setLoading(true);
+    setError('');
+    setUsers([]); // Clear previous data
+    setPage(1);  // Reset to first page on new search
+    setHasMore(true); // Reset hasMore for a new search
     try {
-      const data = await fetchUserData(username);
-      setUserData(data);
+      const data = await fetchAdvancedUserData(searchTerm, location, minRepos, 1);
+      setUsers(data.items);
+      if (data.items.length === 0) setHasMore(false);
     } catch (err) {
-      setError('Looks like we can\'t find the user');
+      setError('Looks like we can’t find any users.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMore = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAdvancedUserData(searchTerm, location, minRepos, page + 1);
+      setUsers((prevUsers) => [...prevUsers, ...data.items]);
+      setPage(page + 1);
+      if (data.items.length === 0) setHasMore(false);
+    } catch (err) {
+      setError('Error loading more results.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter a GitHub username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button type="submit">Search</button>
+    <div className="p-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="GitHub Username"
+            className="border p-2 w-full"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Location"
+            className="border p-2 w-full"
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            value={minRepos}
+            onChange={(e) => setMinRepos(e.target.value)}
+            placeholder="Minimum Repositories"
+            className="border p-2 w-full"
+          />
+        </div>
+        <button type="submit" className="bg-blue-500 text-white p-2">
+          Search
+        </button>
       </form>
 
-      {loading && <div>Loading...</div>}
-      {error && <div>{error}</div>}
-      {userData && (
-        <div>
-          <img src={userData.avatar_url} alt={userData.login} />
-          <h2>{userData.name}</h2>
-          <p>{userData.login}</p>
-          <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-            View on GitHub
-          </a>
-        </div>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+
+      <div className="space-y-4">
+        {users.map((user) => (
+          <div key={user.id} className="border p-4">
+            <img src={user.avatar_url} alt={user.login} width="50" />
+            <h3>{user.login}</h3>
+            <p>Location: {user.location || 'N/A'}</p>
+            <p>Public Repos: {user.public_repos}</p>
+            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+              View Profile
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {hasMore && !loading && (
+        <button onClick={loadMore} className="bg-blue-500 text-white p-2">
+          Load More
+        </button>
       )}
     </div>
   );

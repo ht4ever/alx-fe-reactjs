@@ -1,13 +1,14 @@
+// services/githubService.js
 import axios from 'axios';
 
-const fetchUserData = async (username) => {
-  try {
-    const response = await axios.get(`https://api.github.com/users/${username}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-    throw error;
-  }
+export const fetchAdvancedUserData = async (username, location, minRepos) => {
+  const query = [];
+  
+  if (username) query.push(`user:${username}`);
+  if (location) query.push(`location:${location}`);
+  if (minRepos) query.push(`repos:>=${minRepos}`);
+  
+  const queryString = query.join('+');
+  const response = await axios.get(`https://api.github.com/search/users?q=${queryString}`);
+  return response.data;
 };
-
-export { fetchUserData };
